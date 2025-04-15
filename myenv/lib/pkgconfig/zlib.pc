@@ -1,0 +1,13 @@
+prefix=/Users/rajusubba/Airlines_Delay_Data/myenv
+exec_prefix=/Users/rajusubba/Airlines_Delay_Data/myenv
+libdir=/Users/rajusubba/Airlines_Delay_Data/myenv/lib
+sharedlibdir=/Users/rajusubba/Airlines_Delay_Data/myenv/lib
+includedir=/Users/rajusubba/Airlines_Delay_Data/myenv/include
+
+Name: zlib
+Description: zlib compression library
+Version: 1.2.13
+
+Requires:
+Libs: -L${libdir} -L${sharedlibdir} -lz
+Cflags: -I${includedir}
