@@ -1,48 +1,43 @@
 
 import os
 import pandas as pd
-import boto3
 
-def download_and_sample_data(s3_bucket, s3_key, nrows, local_raw_dir, local_filename):
-    # S3 path like "s3://mlprojects-raju/airlinesdelay/Airlines.csv"
-    s3_path = f"s3://mlprojects-raju/airlinesdelay/Airlines.csv"
+def download_sample_from_s3(s3_path: str, nrows: int, local_dir: str, local_filename: str):
+    """
+    Downloads the first `nrows` rows of a CSV file from S3 and saves them locally.
     
-    print(f"Reading first {nrows} rows from {s3_path}...")
-    df = pd.read_csv(s3_path, nrows=nrows)
-    print("Data read. Shape:", df.shape)
+    Parameters:
+    - s3_path: The S3 URL of the CSV file (e.g., "s3://mlprojects-raju/airlinesdelay/Airlines.csv").
+    - nrows: Number of rows to read (sample size).
+    - local_dir: The local directory where you want to save the file.
+    - local_filename: The name for the local CSV file.
     
+    Returns:
+    - The path to the locally saved sample CSV file.
+    """
     # Ensure the local directory exists
-    os.makedirs(local_raw_dir, exist_ok=True)
-    local_file = os.path.join(local_raw_dir, local_filename)
+    os.makedirs(local_dir, exist_ok=True)
     
-    print(f"Saving sampled data to {local_file}...")
-    df.to_csv(local_file, index=False)
+    # Construct the full local file path
+    local_file = os.path.join(local_dir, local_filename)
+    
+    # Read only the first `nrows` rows from the CSV file on S3
+    print(f"Reading the first {nrows} rows from {s3_path} ...")
+    df_sample = pd.read_csv(s3_path, nrows=nrows)
+    print(f"Sampled data shape: {df_sample.shape}")
+    
+    # Save the sampled DataFrame locally
+    df_sample.to_csv(local_file, index=False)
+    print(f"Sample saved to {local_file}")
     
     return local_file
 
-def upload_to_s3(local_file, s3_bucket, s3_key):
-    s3 = boto3.client("s3")
-    print(f"Uploading {local_file} to s3://{s3_bucket}/{s3_key} ...")
-    s3.upload_file(local_file, s3_bucket, s3_key)
-    print("Upload complete.")
-
 if __name__ == "__main__":
-    # Define S3 bucket and key for the input data.
-    s3_bucket = "mlprojects-raju"
-    s3_input_key = "airlinesdelay/Airlines.csv"
+    # Define parameters
+    s3_file = "s3://mlprojects-raju/airlinesdelay/Airlines.csv"
+    num_rows = 20000
+    destination_dir = os.path.join("data", "raw")
+    destination_file = "Airlines_sample.csv"
     
-    # Define number of rows to sample
-    nrows = 20000
-    
-    # Define local raw directory and file name to save the sampled data
-    local_raw_dir = os.path.join("data", "raw")
-    local_filename = "Airlines_sample.csv"
-    
-    # Download and sample data
-    local_file = download_and_sample_data(s3_bucket, s3_input_key, nrows, local_raw_dir, local_filename)
-    
-    # (Optional) If you want to upload the local file back to S3 in a raw folder:
-    s3_output_key = "airlinesdelay/raw/Airlines_sample.csv"
-    upload_to_s3(local_file, s3_bucket, s3_output_key)
-    
-    print("Process complete.")
+    # Download a sample of the data from S3 and store it locally
+    download_sample_from_s3(s3_file, num_rows, destination_dir, destination_file)
