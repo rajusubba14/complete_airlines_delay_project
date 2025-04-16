@@ -1,2 +1,4 @@
 myenv/
 .DS_Store
+# .gitignore
+model/model.joblib
