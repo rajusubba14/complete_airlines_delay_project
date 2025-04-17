@@ -1,0 +1,6 @@
+# virtual environment
+venv/
+# model artifacts
+model/
+**/*.joblib
+*.tar.gz

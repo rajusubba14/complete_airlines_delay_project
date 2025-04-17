@@ -1,0 +1,10 @@
+pandas
+numpy
+scikit-learn
+matplotlib
+seaborn
+fsspec
+s3fs
+Flask
+boto3
+pytest

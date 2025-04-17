@@ -1,0 +1,1 @@
+{"instances": [{"Flight": 6628, "DayOfWeek": 3, "Time": 900, "Length": 190, "Airline_enc": 12, "AirportFrom_enc": 25, "AirportTo_enc": 77}, {"Flight": 817, "DayOfWeek": 3, "Time": 440, "Length": 85, "Airline_enc": 15, "AirportFrom_enc": 213, "AirportTo_enc": 42}]}
